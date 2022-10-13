@@ -2,6 +2,7 @@
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
+
 /// <summary>
 /// Checks for button input on an input action
 /// </summary>
