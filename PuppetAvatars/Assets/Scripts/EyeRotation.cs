@@ -34,6 +34,34 @@ public class EyeRotation : MonoBehaviour
             //look up/down
             rightEye.transform.Rotate(new Vector3(sensitivity * joyStickValueY, 0.0f, 0.0f), Space.Self);
             leftEye.transform.Rotate(new Vector3(sensitivity * joyStickValueY, 0.0f, 0.0f), Space.Self);
+
+            //if eyes have rotated too far, put them back. 
+            //the way this is written might cause jittering if you push them all the way to the edge? Maybe that's okay.
+            //this isn't workng, and it might have to do with how localEulerAngles represents rotation-- it might never be negative
+            if (rightEye.transform.localEulerAngles.y > rightLimit)
+            {
+                //rightEye.transform.localEulerAngles = new Vector3(rightEye.transform.localEulerAngles.x, rightLimit, rightEye.transform.localEulerAngles.z);
+                //leftEye.transform.localEulerAngles = new Vector3(leftEye.transform.localEulerAngles.x, rightLimit, leftEye.transform.localEulerAngles.z);
+                Debug.Log("eye is too far to the right");
+            }
+            if (rightEye.transform.localEulerAngles.y < leftLimit)
+            {
+                //    rightEye.transform.localEulerAngles = new Vector3(rightEye.transform.localEulerAngles.x, leftLimit, leftEye.transform.localEulerAngles.z);
+                //    leftEye.transform.localEulerAngles = new Vector3(leftEye.transform.localEulerAngles.x, leftLimit, leftEye.transform.localEulerAngles.z);
+                Debug.Log("eye is too far to the left");
+            }
+            if (rightEye.transform.localEulerAngles.x < upLimit)
+            {
+                //    rightEye.transform.localEulerAngles = new Vector3(upLimit, rightEye.transform.localEulerAngles.y, rightEye.transform.localEulerAngles.z);
+                //    leftEye.transform.localEulerAngles = new Vector3(upLimit, leftEye.transform.localEulerAngles.y, leftEye.transform.localEulerAngles.z);
+                Debug.Log("eye is too far up");
+            }
+            if (rightEye.transform.localEulerAngles.x > downLimit)
+            {
+                //    rightEye.transform.localEulerAngles = new Vector3(downLimit, rightEye.transform.localEulerAngles.y, rightEye.transform.localEulerAngles.z);
+                //    leftEye.transform.localEulerAngles = new Vector3(downLimit, leftEye.transform.localEulerAngles.y, leftEye.transform.localEulerAngles.z);
+                Debug.Log("eye is too far down");
+            }
         }
     }
 
@@ -75,7 +103,7 @@ public class EyeRotation : MonoBehaviour
     private void PressedLR(InputAction.CallbackContext context)
     {
         joyStickDown = true;
-        Debug.Log("and perhaps this gives us a value? " + context.ReadValueAsObject());//THIS DOES IT
+        //Debug.Log("and perhaps this gives us a value? " + context.ReadValueAsObject());//THIS DOES IT
         joyStickValueX = (float) context.ReadValueAsObject();
     }
 
@@ -87,32 +115,12 @@ public class EyeRotation : MonoBehaviour
     private void PressedUD(InputAction.CallbackContext context)
     {
         joyStickDown = true;
-        Debug.Log("and perhaps this gives us a value? " + context.ReadValueAsObject());//THIS DOES IT
+        //Debug.Log("and perhaps this gives us a value? " + context.ReadValueAsObject());//THIS DOES IT
         joyStickValueY = (float)context.ReadValueAsObject();
     }
 
     private void ReleasedUD(InputAction.CallbackContext context)
     {
         joyStickDown = false;
-    }
-
-    //these two functions would be useful if joystick input were set up a little differently
-    //no right and left. transform.rotate value * speed
-    //limits aren't working yet
-    public void RotateRight()
-    {
-        if(rightEye.transform.localEulerAngles.y < rightLimit)
-        {
-            rightEye.transform.Rotate(new Vector3(0.0f, sensitivity, 0.0f), Space.Self);
-            leftEye.transform.Rotate(new Vector3(0.0f, sensitivity, 0.0f), Space.Self);
-        }
-    }
-    public void RotateLeft()
-    {
-        if (rightEye.transform.localEulerAngles.y > leftLimit)
-        {
-            rightEye.transform.Rotate(new Vector3(0.0f, -sensitivity, 0.0f), Space.Self);
-            leftEye.transform.Rotate(new Vector3(0.0f, -sensitivity, 0.0f), Space.Self);
-        }
     }
 }
